@@ -2,6 +2,7 @@
 
 generate:
 	@protoc --go_out="plugins=grpc:." *.proto
+	@./../web/gen_js_lib.sh
 	@go mod tidy
 	@go generate ./...
 	@echo "[OK] Generate all completed!"
