@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package lnks_homecloud.clh021.webshell;
+
+option go_package='.;main';
+
+message Msg {
+  string cmd = 1;
+}
+message Std {
+  string stdout = 1;
+  string stderr = 2;
+}
+service Shell {
+  rpc Run(Msg) returns (Std);
+}
