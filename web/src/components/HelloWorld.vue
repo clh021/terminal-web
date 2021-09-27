@@ -58,7 +58,11 @@ export default {
     getCmdResult() {
       const cmdRequest = new CmdRequest();
       cmdRequest.setProg(this.cmd)
-      cmdRequest.addArgs(this.arg)
+      let args = this.arg.split(" ")
+      args.forEach(arg => {
+        console.log("arg:", arg);
+        cmdRequest.addArgs(arg)
+      });
       this.newGrpcClient();
       this.client.send(cmdRequest);
       // this.client.finishSend();

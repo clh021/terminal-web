@@ -1,5 +1,5 @@
 name: webshell
-port: 7900
+port: 7901
 permissions:
   - io.read
   - io.write

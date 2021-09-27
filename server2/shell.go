@@ -8,7 +8,7 @@ import (
 
 type ShellService struct{}
 
-func (ShellService) Run(s ShellService_RunServer) error {
+func (ShellService) Run2(s ShellService_Run2Server) error {
 	log.Println("func Run:")
 	req, err := s.Recv()
 	defer func(e *error) {
