@@ -11,7 +11,7 @@ nowTime=$(shell date +00%y%m%d%H%M%S)
 gitCID=$(shell git rev-parse HEAD)
 gitTime=$(git log -1 --format=%at | xargs -I{} date -d @{} +%Y%m%d_%H%M%S)
 build: generate
-	@go build -ldflags "-s -w -X main.build=${nowTime}.${gitCID}" -o "./bin/webshell"
+	@CGO_ENABLED=0 go build -ldflags "-s -w -X main.build=${nowTime}.${gitCID}" -o "./bin/webshell"
 	@echo "[OK] App binary was created!"
 
 run:
