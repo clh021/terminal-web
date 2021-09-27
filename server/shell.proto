@@ -5,12 +5,21 @@ package lnks_homecloud.clh021.webshell;
 option go_package='.;main';
 
 message Msg {
-  string cmd = 1;
+  string s = 1;
 }
-message Std {
-  string stdout = 1;
-  string stderr = 2;
+message CmdRequest {
+  string prog = 1;
+  repeated string args = 2;
+  string stdin = 3;
 }
-service Shell {
-  rpc Run(Msg) returns (Std);
+message Output {
+  bytes stdout = 1;
+  bytes stderr = 2;
+}
+message Empty {
+}
+service ShellService {
+  rpc CMsg(stream Msg) returns (Empty);
+  rpc SMsg(CmdRequest) returns (stream Msg);
+  rpc Run(stream CmdRequest) returns(stream Output);
 }

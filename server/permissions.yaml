@@ -1,0 +1,6 @@
+lnksapp:
+  port: 7900
+  permissions:
+    - io.read
+    - io.write
+    - system.cmd

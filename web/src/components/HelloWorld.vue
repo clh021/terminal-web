@@ -1,58 +1,82 @@
 <template>
   <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+    服务地址: <input type="text" v-model="grpcHost"><br>
+    命令:<input type="text" v-model="cmd">
+    参数:<input type="text" v-model="arg">
+    <button @click="getCmdResult">发送测试</button><br>
+    <textarea v-model="cmdResult" cols="80" rows="40"></textarea>
   </div>
 </template>
 
 <script>
+import {grpc} from "@improbable-eng/grpc-web";
+import {ShellService} from '../lib/shell_pb_service'
+import {CmdRequest} from '../lib/shell_pb'
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      cmd: "ls",
+      arg: "-lah",
+      cmdResult: "",
+      client: null,
+      grpcHost: "http://127.0.0.1:7900"
+    }
+  },
+  mounted() {
+      grpc.setDefaultTransport(grpc.WebsocketTransport());
+      // this.getCmdResult();
+      this.getDiskResult();
+  },
+  methods: {
+    newGrpcClient() {
+      this.client = grpc.client(ShellService.Run, {
+        host: this.grpcHost,
+        debug: true,
+      });
+      this.client.onMessage((message) => {
+        let m = message.getStdout();
+        if (m.length > 0) {
+          this.cmdResult = (new TextDecoder()).decode(m);
+          console.log(this.cmdResult);
+          console.log("message:", message.toObject());
+        } else {
+          console.log("message:", message.toObject());
+        }
+      });
+      this.client.onHeaders((headers) => {
+        console.log("onHeaders", headers);
+      });
+      this.client.onEnd((code, msg, trailers) => {
+        console.log("onEnd", code, msg, trailers);
+      });
+      this.client.start();
+    },
+    getCmdResult() {
+      const cmdRequest = new CmdRequest();
+      cmdRequest.setProg(this.cmd)
+      cmdRequest.addArgs(this.arg)
+      this.newGrpcClient();
+      this.client.send(cmdRequest);
+      // this.client.finishSend();
+      // this.client.close();
+    },
+    getDiskResult() {
+      const cmdRequest = new CmdRequest();
+      cmdRequest.setProg("df")
+      cmdRequest.addArgs("-lh")
+      this.newGrpcClient();
+      this.client.send(cmdRequest);
+      // this.client.finishSend();
+      // this.client.close();
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>

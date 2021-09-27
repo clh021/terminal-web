@@ -29,7 +29,7 @@ type Msg struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Cmd string `protobuf:"bytes,1,opt,name=cmd,proto3" json:"cmd,omitempty"`
+	S string `protobuf:"bytes,1,opt,name=s,proto3" json:"s,omitempty"`
 }
 
 func (x *Msg) Reset() {
@@ -64,24 +64,25 @@ func (*Msg) Descriptor() ([]byte, []int) {
 	return file_shell_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *Msg) GetCmd() string {
+func (x *Msg) GetS() string {
 	if x != nil {
-		return x.Cmd
+		return x.S
 	}
 	return ""
 }
 
-type Std struct {
+type CmdRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Stdout string `protobuf:"bytes,1,opt,name=stdout,proto3" json:"stdout,omitempty"`
-	Stderr string `protobuf:"bytes,2,opt,name=stderr,proto3" json:"stderr,omitempty"`
+	Prog  string   `protobuf:"bytes,1,opt,name=prog,proto3" json:"prog,omitempty"`
+	Args  []string `protobuf:"bytes,2,rep,name=args,proto3" json:"args,omitempty"`
+	Stdin string   `protobuf:"bytes,3,opt,name=stdin,proto3" json:"stdin,omitempty"`
 }
 
-func (x *Std) Reset() {
-	*x = Std{}
+func (x *CmdRequest) Reset() {
+	*x = CmdRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_shell_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -89,13 +90,13 @@ func (x *Std) Reset() {
 	}
 }
 
-func (x *Std) String() string {
+func (x *CmdRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*Std) ProtoMessage() {}
+func (*CmdRequest) ProtoMessage() {}
 
-func (x *Std) ProtoReflect() protoreflect.Message {
+func (x *CmdRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_shell_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -107,23 +108,123 @@ func (x *Std) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Std.ProtoReflect.Descriptor instead.
-func (*Std) Descriptor() ([]byte, []int) {
+// Deprecated: Use CmdRequest.ProtoReflect.Descriptor instead.
+func (*CmdRequest) Descriptor() ([]byte, []int) {
 	return file_shell_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *Std) GetStdout() string {
+func (x *CmdRequest) GetProg() string {
 	if x != nil {
-		return x.Stdout
+		return x.Prog
 	}
 	return ""
 }
 
-func (x *Std) GetStderr() string {
+func (x *CmdRequest) GetArgs() []string {
+	if x != nil {
+		return x.Args
+	}
+	return nil
+}
+
+func (x *CmdRequest) GetStdin() string {
+	if x != nil {
+		return x.Stdin
+	}
+	return ""
+}
+
+type Output struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Stdout []byte `protobuf:"bytes,1,opt,name=stdout,proto3" json:"stdout,omitempty"`
+	Stderr []byte `protobuf:"bytes,2,opt,name=stderr,proto3" json:"stderr,omitempty"`
+}
+
+func (x *Output) Reset() {
+	*x = Output{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shell_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Output) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Output) ProtoMessage() {}
+
+func (x *Output) ProtoReflect() protoreflect.Message {
+	mi := &file_shell_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Output.ProtoReflect.Descriptor instead.
+func (*Output) Descriptor() ([]byte, []int) {
+	return file_shell_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *Output) GetStdout() []byte {
+	if x != nil {
+		return x.Stdout
+	}
+	return nil
+}
+
+func (x *Output) GetStderr() []byte {
 	if x != nil {
 		return x.Stderr
 	}
-	return ""
+	return nil
+}
+
+type Empty struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *Empty) Reset() {
+	*x = Empty{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_shell_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_shell_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_shell_proto_rawDescGZIP(), []int{3}
 }
 
 var File_shell_proto protoreflect.FileDescriptor
@@ -131,19 +232,37 @@ var File_shell_proto protoreflect.FileDescriptor
 var file_shell_proto_rawDesc = []byte{
 	0x0a, 0x0b, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x1e, 0x6c,
 	0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c,
-	0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x22, 0x17, 0x0a,
-	0x03, 0x4d, 0x73, 0x67, 0x12, 0x10, 0x0a, 0x03, 0x63, 0x6d, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
-	0x09, 0x52, 0x03, 0x63, 0x6d, 0x64, 0x22, 0x35, 0x0a, 0x03, 0x53, 0x74, 0x64, 0x12, 0x16, 0x0a,
-	0x06, 0x73, 0x74, 0x64, 0x6f, 0x75, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73,
-	0x74, 0x64, 0x6f, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x18,
-	0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x32, 0x58, 0x0a,
-	0x05, 0x53, 0x68, 0x65, 0x6c, 0x6c, 0x12, 0x4f, 0x0a, 0x03, 0x52, 0x75, 0x6e, 0x12, 0x23, 0x2e,
-	0x6c, 0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63,
-	0x6c, 0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x4d,
-	0x73, 0x67, 0x1a, 0x23, 0x2e, 0x6c, 0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c,
-	0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c, 0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68,
-	0x65, 0x6c, 0x6c, 0x2e, 0x53, 0x74, 0x64, 0x42, 0x08, 0x5a, 0x06, 0x2e, 0x3b, 0x6d, 0x61, 0x69,
-	0x6e, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x22, 0x13, 0x0a,
+	0x03, 0x4d, 0x73, 0x67, 0x12, 0x0c, 0x0a, 0x01, 0x73, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x01, 0x73, 0x22, 0x4a, 0x0a, 0x0a, 0x43, 0x6d, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x12, 0x0a, 0x04, 0x70, 0x72, 0x6f, 0x67, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04,
+	0x70, 0x72, 0x6f, 0x67, 0x12, 0x12, 0x0a, 0x04, 0x61, 0x72, 0x67, 0x73, 0x18, 0x02, 0x20, 0x03,
+	0x28, 0x09, 0x52, 0x04, 0x61, 0x72, 0x67, 0x73, 0x12, 0x14, 0x0a, 0x05, 0x73, 0x74, 0x64, 0x69,
+	0x6e, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x73, 0x74, 0x64, 0x69, 0x6e, 0x22, 0x38,
+	0x0a, 0x06, 0x4f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x64, 0x6f,
+	0x75, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x06, 0x73, 0x74, 0x64, 0x6f, 0x75, 0x74,
+	0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0c,
+	0x52, 0x06, 0x73, 0x74, 0x64, 0x65, 0x72, 0x72, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x32, 0x9e, 0x02, 0x0a, 0x0c, 0x53, 0x68, 0x65, 0x6c, 0x6c, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x12, 0x54, 0x0a, 0x04, 0x43, 0x4d, 0x73, 0x67, 0x12, 0x23, 0x2e, 0x6c, 0x6e, 0x6b,
+	0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c, 0x68, 0x30,
+	0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x4d, 0x73, 0x67, 0x1a,
+	0x25, 0x2e, 0x6c, 0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64,
+	0x2e, 0x63, 0x6c, 0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c,
+	0x2e, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x28, 0x01, 0x12, 0x59, 0x0a, 0x04, 0x53, 0x4d, 0x73, 0x67,
+	0x12, 0x2a, 0x2e, 0x6c, 0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75,
+	0x64, 0x2e, 0x63, 0x6c, 0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c,
+	0x6c, 0x2e, 0x43, 0x6d, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x23, 0x2e, 0x6c,
+	0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c,
+	0x68, 0x30, 0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x4d, 0x73,
+	0x67, 0x30, 0x01, 0x12, 0x5d, 0x0a, 0x03, 0x52, 0x75, 0x6e, 0x12, 0x2a, 0x2e, 0x6c, 0x6e, 0x6b,
+	0x73, 0x5f, 0x68, 0x6f, 0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c, 0x68, 0x30,
+	0x32, 0x31, 0x2e, 0x77, 0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x43, 0x6d, 0x64, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x26, 0x2e, 0x6c, 0x6e, 0x6b, 0x73, 0x5f, 0x68, 0x6f,
+	0x6d, 0x65, 0x63, 0x6c, 0x6f, 0x75, 0x64, 0x2e, 0x63, 0x6c, 0x68, 0x30, 0x32, 0x31, 0x2e, 0x77,
+	0x65, 0x62, 0x73, 0x68, 0x65, 0x6c, 0x6c, 0x2e, 0x4f, 0x75, 0x74, 0x70, 0x75, 0x74, 0x28, 0x01,
+	0x30, 0x01, 0x42, 0x08, 0x5a, 0x06, 0x2e, 0x3b, 0x6d, 0x61, 0x69, 0x6e, 0x62, 0x06, 0x70, 0x72,
+	0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -158,16 +277,22 @@ func file_shell_proto_rawDescGZIP() []byte {
 	return file_shell_proto_rawDescData
 }
 
-var file_shell_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_shell_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_shell_proto_goTypes = []interface{}{
-	(*Msg)(nil), // 0: lnks_homecloud.clh021.webshell.Msg
-	(*Std)(nil), // 1: lnks_homecloud.clh021.webshell.Std
+	(*Msg)(nil),        // 0: lnks_homecloud.clh021.webshell.Msg
+	(*CmdRequest)(nil), // 1: lnks_homecloud.clh021.webshell.CmdRequest
+	(*Output)(nil),     // 2: lnks_homecloud.clh021.webshell.Output
+	(*Empty)(nil),      // 3: lnks_homecloud.clh021.webshell.Empty
 }
 var file_shell_proto_depIdxs = []int32{
-	0, // 0: lnks_homecloud.clh021.webshell.Shell.Run:input_type -> lnks_homecloud.clh021.webshell.Msg
-	1, // 1: lnks_homecloud.clh021.webshell.Shell.Run:output_type -> lnks_homecloud.clh021.webshell.Std
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	0, // 0: lnks_homecloud.clh021.webshell.ShellService.CMsg:input_type -> lnks_homecloud.clh021.webshell.Msg
+	1, // 1: lnks_homecloud.clh021.webshell.ShellService.SMsg:input_type -> lnks_homecloud.clh021.webshell.CmdRequest
+	1, // 2: lnks_homecloud.clh021.webshell.ShellService.Run:input_type -> lnks_homecloud.clh021.webshell.CmdRequest
+	3, // 3: lnks_homecloud.clh021.webshell.ShellService.CMsg:output_type -> lnks_homecloud.clh021.webshell.Empty
+	0, // 4: lnks_homecloud.clh021.webshell.ShellService.SMsg:output_type -> lnks_homecloud.clh021.webshell.Msg
+	2, // 5: lnks_homecloud.clh021.webshell.ShellService.Run:output_type -> lnks_homecloud.clh021.webshell.Output
+	3, // [3:6] is the sub-list for method output_type
+	0, // [0:3] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -192,7 +317,31 @@ func file_shell_proto_init() {
 			}
 		}
 		file_shell_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Std); i {
+			switch v := v.(*CmdRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shell_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Output); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_shell_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*Empty); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -210,7 +359,7 @@ func file_shell_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_shell_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -232,74 +381,239 @@ var _ grpc.ClientConnInterface
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion6
 
-// ShellClient is the client API for Shell service.
+// ShellServiceClient is the client API for ShellService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ShellClient interface {
-	Run(ctx context.Context, in *Msg, opts ...grpc.CallOption) (*Std, error)
+type ShellServiceClient interface {
+	CMsg(ctx context.Context, opts ...grpc.CallOption) (ShellService_CMsgClient, error)
+	SMsg(ctx context.Context, in *CmdRequest, opts ...grpc.CallOption) (ShellService_SMsgClient, error)
+	Run(ctx context.Context, opts ...grpc.CallOption) (ShellService_RunClient, error)
 }
 
-type shellClient struct {
+type shellServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewShellClient(cc grpc.ClientConnInterface) ShellClient {
-	return &shellClient{cc}
+func NewShellServiceClient(cc grpc.ClientConnInterface) ShellServiceClient {
+	return &shellServiceClient{cc}
 }
 
-func (c *shellClient) Run(ctx context.Context, in *Msg, opts ...grpc.CallOption) (*Std, error) {
-	out := new(Std)
-	err := c.cc.Invoke(ctx, "/lnks_homecloud.clh021.webshell.Shell/Run", in, out, opts...)
+func (c *shellServiceClient) CMsg(ctx context.Context, opts ...grpc.CallOption) (ShellService_CMsgClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ShellService_serviceDesc.Streams[0], "/lnks_homecloud.clh021.webshell.ShellService/CMsg", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &shellServiceCMsgClient{stream}
+	return x, nil
 }
 
-// ShellServer is the server API for Shell service.
-type ShellServer interface {
-	Run(context.Context, *Msg) (*Std, error)
+type ShellService_CMsgClient interface {
+	Send(*Msg) error
+	CloseAndRecv() (*Empty, error)
+	grpc.ClientStream
 }
 
-// UnimplementedShellServer can be embedded to have forward compatible implementations.
-type UnimplementedShellServer struct {
+type shellServiceCMsgClient struct {
+	grpc.ClientStream
 }
 
-func (*UnimplementedShellServer) Run(context.Context, *Msg) (*Std, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Run not implemented")
+func (x *shellServiceCMsgClient) Send(m *Msg) error {
+	return x.ClientStream.SendMsg(m)
 }
 
-func RegisterShellServer(s *grpc.Server, srv ShellServer) {
-	s.RegisterService(&_Shell_serviceDesc, srv)
-}
-
-func _Shell_Run_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Msg)
-	if err := dec(in); err != nil {
+func (x *shellServiceCMsgClient) CloseAndRecv() (*Empty, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(ShellServer).Run(ctx, in)
+	m := new(Empty)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
 	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/lnks_homecloud.clh021.webshell.Shell/Run",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ShellServer).Run(ctx, req.(*Msg))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
-var _Shell_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "lnks_homecloud.clh021.webshell.Shell",
-	HandlerType: (*ShellServer)(nil),
-	Methods: []grpc.MethodDesc{
+func (c *shellServiceClient) SMsg(ctx context.Context, in *CmdRequest, opts ...grpc.CallOption) (ShellService_SMsgClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ShellService_serviceDesc.Streams[1], "/lnks_homecloud.clh021.webshell.ShellService/SMsg", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &shellServiceSMsgClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type ShellService_SMsgClient interface {
+	Recv() (*Msg, error)
+	grpc.ClientStream
+}
+
+type shellServiceSMsgClient struct {
+	grpc.ClientStream
+}
+
+func (x *shellServiceSMsgClient) Recv() (*Msg, error) {
+	m := new(Msg)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *shellServiceClient) Run(ctx context.Context, opts ...grpc.CallOption) (ShellService_RunClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_ShellService_serviceDesc.Streams[2], "/lnks_homecloud.clh021.webshell.ShellService/Run", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &shellServiceRunClient{stream}
+	return x, nil
+}
+
+type ShellService_RunClient interface {
+	Send(*CmdRequest) error
+	Recv() (*Output, error)
+	grpc.ClientStream
+}
+
+type shellServiceRunClient struct {
+	grpc.ClientStream
+}
+
+func (x *shellServiceRunClient) Send(m *CmdRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *shellServiceRunClient) Recv() (*Output, error) {
+	m := new(Output)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// ShellServiceServer is the server API for ShellService service.
+type ShellServiceServer interface {
+	CMsg(ShellService_CMsgServer) error
+	SMsg(*CmdRequest, ShellService_SMsgServer) error
+	Run(ShellService_RunServer) error
+}
+
+// UnimplementedShellServiceServer can be embedded to have forward compatible implementations.
+type UnimplementedShellServiceServer struct {
+}
+
+func (*UnimplementedShellServiceServer) CMsg(ShellService_CMsgServer) error {
+	return status.Errorf(codes.Unimplemented, "method CMsg not implemented")
+}
+func (*UnimplementedShellServiceServer) SMsg(*CmdRequest, ShellService_SMsgServer) error {
+	return status.Errorf(codes.Unimplemented, "method SMsg not implemented")
+}
+func (*UnimplementedShellServiceServer) Run(ShellService_RunServer) error {
+	return status.Errorf(codes.Unimplemented, "method Run not implemented")
+}
+
+func RegisterShellServiceServer(s *grpc.Server, srv ShellServiceServer) {
+	s.RegisterService(&_ShellService_serviceDesc, srv)
+}
+
+func _ShellService_CMsg_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ShellServiceServer).CMsg(&shellServiceCMsgServer{stream})
+}
+
+type ShellService_CMsgServer interface {
+	SendAndClose(*Empty) error
+	Recv() (*Msg, error)
+	grpc.ServerStream
+}
+
+type shellServiceCMsgServer struct {
+	grpc.ServerStream
+}
+
+func (x *shellServiceCMsgServer) SendAndClose(m *Empty) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *shellServiceCMsgServer) Recv() (*Msg, error) {
+	m := new(Msg)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _ShellService_SMsg_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(CmdRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ShellServiceServer).SMsg(m, &shellServiceSMsgServer{stream})
+}
+
+type ShellService_SMsgServer interface {
+	Send(*Msg) error
+	grpc.ServerStream
+}
+
+type shellServiceSMsgServer struct {
+	grpc.ServerStream
+}
+
+func (x *shellServiceSMsgServer) Send(m *Msg) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _ShellService_Run_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(ShellServiceServer).Run(&shellServiceRunServer{stream})
+}
+
+type ShellService_RunServer interface {
+	Send(*Output) error
+	Recv() (*CmdRequest, error)
+	grpc.ServerStream
+}
+
+type shellServiceRunServer struct {
+	grpc.ServerStream
+}
+
+func (x *shellServiceRunServer) Send(m *Output) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *shellServiceRunServer) Recv() (*CmdRequest, error) {
+	m := new(CmdRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _ShellService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "lnks_homecloud.clh021.webshell.ShellService",
+	HandlerType: (*ShellServiceServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "Run",
-			Handler:    _Shell_Run_Handler,
+			StreamName:    "CMsg",
+			Handler:       _ShellService_CMsg_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "SMsg",
+			Handler:       _ShellService_SMsg_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "Run",
+			Handler:       _ShellService_Run_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "shell.proto",
 }
