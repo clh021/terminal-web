@@ -6,6 +6,7 @@ import (
 	"net"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 	}
 	grpcServer := grpc.NewServer()
 	RegisterShellServiceServer(grpcServer, &ShellService{})
+	reflection.Register(grpcServer)
 	log.Printf("starting server. http port: %d ", port)
 	grpcServer.Serve(lis)
 }
