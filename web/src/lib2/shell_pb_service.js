@@ -28,7 +28,7 @@ ShellService.SMsg = {
   responseType: shell_pb.Msg
 };
 
-ShellService.Run = {
+ShellService.Run2 = {
   methodName: "Run2",
   service: ShellService,
   requestStream: true,
@@ -124,13 +124,13 @@ ShellServiceClient.prototype.sMsg = function sMsg(requestMessage, metadata) {
   };
 };
 
-ShellServiceClient.prototype.run = function run(metadata) {
+ShellServiceClient.prototype.run2 = function run2(metadata) {
   var listeners = {
     data: [],
     end: [],
     status: []
   };
-  var client = grpc.client(ShellService.Run, {
+  var client = grpc.client(ShellService.Run2, {
     host: this.serviceHost,
     metadata: metadata,
     transport: this.options.transport

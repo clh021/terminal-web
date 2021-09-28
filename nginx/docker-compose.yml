@@ -32,7 +32,7 @@ services:
     grpc22:
         image: ubuntu:latest
         ports:
-            - "7902:7902"
+            - "7902:7901"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "./../server2/bin/webshell:/grpc"

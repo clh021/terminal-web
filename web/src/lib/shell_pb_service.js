@@ -29,7 +29,7 @@ ShellService.SMsg = {
 };
 
 ShellService.Run = {
-  methodName: "Run2",
+  methodName: "Run",
   service: ShellService,
   requestStream: true,
   responseStream: true,

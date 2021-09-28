@@ -19,7 +19,7 @@ func director(ctx context.Context, fullMethodName string) (context.Context, *grp
 	log.Println("fullMethodName:", fullMethodName)
 	// 将 proxy 的请求根据 serviceName 转发给 真正的服务提供 者
 	md, _ := metadata.FromIncomingContext(ctx)
-	address := "grpc2:7901"
+	address := "grpc21:7901"
 	conn, err := grpc.DialContext(ctx, address, grpc.WithBlock(), grpc.WithInsecure(), grpc.WithCodec(proxy.Codec()))
 	if err != nil {
 		log.Println("error[conn]:", err)

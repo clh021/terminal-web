@@ -1,13 +1,14 @@
 <template>
-  <div class="hello">After docker-compose up to test:
-    <button @click="grpcWeb">grpcWeb</button>
-    <button @click="grpcWebProxy">grpcWebProxy</button>
-    <button @click="nginxProxy">nginxProxy</button>
+  <div class="hello">After docker-compose up:
+    <button @click="handleGrpcWeb">grpcWeb</button>
+    <button @click="handleGrpcWebProxy">grpcWebProxy</button>
+    <button @click="handleNginxProxy('http://grpc21.localhost:7564','-l','ls')">nginxProxyS1</button>
+    <button @click="handleNginxProxy('http://grpc22.localhost:7564','-lah','ls')">nginxProxyS2</button>
     <hr />
     地址: <input type="text" v-model="grpcHost">
     命令:<input class="sinput" type="text" v-model="cmd">
     参数:<input class="sinput" type="text" v-model="arg">
-    <button @click="getCmdResult">发送测试</button><br>
+    <button @click="handleDoCmd">发送测试</button><br>
     <textarea v-model="cmdResult" cols="80" rows="40"></textarea>
   </div>
 </template>
@@ -15,8 +16,9 @@
 <script>
 import {grpc} from "@improbable-eng/grpc-web";
 import {ShellService} from '../lib/shell_pb_service'
-import {ShellService as ShellService2} from './shell_pb_service2'
 import {CmdRequest} from '../lib/shell_pb'
+import {ShellService as ShellService2} from '../lib2/shell_pb_service'
+// import {CmdRequest as CmdRequest2} from '../lib2/shell_pb'
 export default {
   name: 'HelloWorld',
   props: {
@@ -35,46 +37,30 @@ export default {
       // grpc.setDefaultTransport(grpc.WebsocketTransport()); // 目前仅 nginx proxy 方式还不支持 websocket 访问
   },
   methods: {
-    grpcWeb() {
+    handleGrpcWeb() {
       this.grpcHost="http://127.0.0.1:7900";
+      this.newGrpcClient();
       this.getDiskResult();
     },
-    grpcWebProxy(){
+    handleGrpcWebProxy(){
       this.grpcHost="http://127.0.0.1:7900";
-      this.newGrpcClient2();
+      this.newGrpcClient(ShellService2.Run2);
       this.arg="-lh";
       this.getCmdResult();
     },
-    nginxProxy(){
-      this.grpcHost="http://127.0.0.1:7903";
-      this.arg="-l";
+    handleNginxProxy(grpcHost="http://127.0.0.1:7564", arg="-l", cmd="ls"){
+      this.grpcHost=grpcHost;
+      this.arg=arg;
+      this.cmd=cmd;
+      this.newGrpcClient(ShellService2.Run2);
       this.getCmdResult();
     },
-    newGrpcClient2() {
-      this.client = grpc.client(ShellService2.Run, {
-        host: this.grpcHost,
-        debug: true,
-      });
-      this.client.onMessage((message) => {
-        let m = message.getStdout();
-        if (m.length > 0) {
-          this.cmdResult = (new TextDecoder()).decode(m);
-          console.log(this.cmdResult);
-          console.log("message:", message.toObject());
-        } else {
-          console.log("message:", message.toObject());
-        }
-      });
-      this.client.onHeaders((headers) => {
-        console.log("onHeaders", headers);
-      });
-      this.client.onEnd((code, msg, trailers) => {
-        console.log("onEnd", code, msg, trailers);
-      });
-      this.client.start();
+    handleDoCmd() {
+      this.newGrpcClient();
+      this.getCmdResult();
     },
-    newGrpcClient() {
-      this.client = grpc.client(ShellService.Run, {
+    newGrpcClient(methods=ShellService.Run) {
+      this.client = grpc.client(methods, {
         host: this.grpcHost,
         debug: true,
       });
@@ -104,7 +90,6 @@ export default {
         console.log("arg:", arg);
         cmdRequest.addArgs(arg)
       });
-      this.newGrpcClient();
       this.client.send(cmdRequest);
       // this.client.finishSend();
       // this.client.close();
@@ -113,7 +98,6 @@ export default {
       const cmdRequest = new CmdRequest();
       cmdRequest.setProg("df")
       cmdRequest.addArgs("-lh")
-      this.newGrpcClient();
       this.client.send(cmdRequest);
       // this.client.finishSend();
       // this.client.close();
