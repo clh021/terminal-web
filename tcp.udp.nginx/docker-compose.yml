@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+    nginx:
+        depends_on:
+            - ftp
+        image: nginx:latest
+        ports:
+            - "${NGINX_PORT:-80}:80"
+            - "7564:7564"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./ssl:/etc/nginx/ssl:ro"
+            - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    server:
+        image: delfer/alpine-ftp-server:latest
+        ports:
+            - "21:21"
+            - "21000-21010:21000-21010"
+        environment:
+            USERS: "one|1234"
+            ADDRESS: "ftp.localhost"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+    client:
+        image: delfer/alpine-ftp-server:latest
+        ports:
+            - "21:21"
+            - "21000-21010:21000-21010"
+        environment:
+            USERS: "one|1234"
+            ADDRESS: "ftp.localhost"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
