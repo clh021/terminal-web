@@ -3,11 +3,12 @@ services:
     nginx:
         depends_on:
             - grpc1
-            - grpc2
+            - grpc21
+            - grpc22
         image: nginx:latest
         ports:
             - "${NGINX_PORT:-80}:80"
-            - "7903:7903"
+            - "7564:7564"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "./ssl:/etc/nginx/ssl:ro"
@@ -21,10 +22,18 @@ services:
             - "./../server/bin/webshell:/grpc"
         command: /grpc
         # command: ['ls', '-lah', '/host']
-    grpc2:
+    grpc21:
         image: ubuntu:latest
         ports:
             - "7901:7901"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./../server2/bin/webshell:/grpc"
+        command: /grpc
+    grpc22:
+        image: ubuntu:latest
+        ports:
+            - "7902:7901"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "./../server2/bin/webshell:/grpc"
