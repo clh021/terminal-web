@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+    nginx:
+        depends_on:
+            - grpc1
+            - grpc2
+        image: nginx:latest
+        ports:
+            - "${NGINX_PORT:-80}:80"
+            - "7903:7903"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./ssl:/etc/nginx/ssl:ro"
+            - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
+    grpc1:
+        image: ubuntu:latest
+        ports:
+            - "7900:7900"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./../server/bin/webshell:/grpc"
+        command: /grpc
+        # command: ['ls', '-lah', '/host']
+    grpc2:
+        image: ubuntu:latest
+        ports:
+            - "7901:7901"
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./../server2/bin/webshell:/grpc"
+        command: /grpc
+        # command: ['ls', '-lah', '/host']
