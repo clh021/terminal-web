@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"net"
 	"os"
 	"strings"
@@ -25,9 +26,18 @@ func udpRecv(conn *net.UDPConn) {
 	}
 	fmt.Printf("[UDP]read %d from <%s> recv:%v \n", n, remoteAddr, data[:n])
 }
-func udpSender(sendto string, port int) {
+func udpSender(sendto string, port int, inputMode bool) {
 	// 建立连接
 	ip := net.ParseIP(sendto)
+	if ip == nil {
+		addr, err := net.ResolveIPAddr("ip", sendto)
+		if err != nil {
+			fmt.Println("[UDP]ParseIPError: ", err)
+		}
+		fmt.Println("[UDP]ParseIP: ", sendto, " => ", addr.String())
+		ip = net.ParseIP(addr.String())
+	}
+	log.Println("udp sendto ip:", ip)
 	// srcAddr := &net.UDPAddr{IP: net.IPv4zero, Port: 0}
 	dstAddr := &net.UDPAddr{IP: ip, Port: port}
 	conn, err := net.DialUDP("udp", nil, dstAddr)
@@ -44,16 +54,18 @@ func udpSender(sendto string, port int) {
 		udpRecv(conn)
 	}
 
-	// 手动测试
-	inputReader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Println("[UDP]Input something to send(q to quite):")
-		input, _ := inputReader.ReadString('\n')
-		inputInfo := strings.Trim(input, "\r\n")
-		if strings.ToUpper(inputInfo) == "Q" {
-			return
+	if inputMode {
+		// 手动测试
+		inputReader := bufio.NewReader(os.Stdin)
+		for {
+			fmt.Println("[UDP]Input something to send(q to quite):")
+			input, _ := inputReader.ReadString('\n')
+			inputInfo := strings.Trim(input, "\r\n")
+			if strings.ToUpper(inputInfo) == "Q" {
+				return
+			}
+			udpSend(conn, inputInfo)
+			udpRecv(conn)
 		}
-		udpSend(conn, inputInfo)
-		udpRecv(conn)
 	}
 }

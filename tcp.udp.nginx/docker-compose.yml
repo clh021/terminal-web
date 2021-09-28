@@ -2,7 +2,8 @@ version: '3.3'
 services:
     nginx:
         depends_on:
-            - ftp
+            - server1
+            - server2
         image: nginx:latest
         ports:
             - "${NGINX_PORT:-80}:80"
@@ -10,24 +11,40 @@ services:
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
             - "./ssl:/etc/nginx/ssl:ro"
-            - "./nginx.conf:/etc/nginx/conf.d/default.conf:ro"
-    server:
-        image: delfer/alpine-ftp-server:latest
+            - "./nginx.conf:/etc/nginx/nginx.conf:ro"
+    server1:
+        image: ubuntu:latest
         ports:
-            - "21:21"
-            - "21000-21010:21000-21010"
-        environment:
-            USERS: "one|1234"
-            ADDRESS: "ftp.localhost"
+            - "7990:7990"
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
-    client:
-        image: delfer/alpine-ftp-server:latest
-        ports:
-            - "21:21"
-            - "21000-21010:21000-21010"
-        environment:
-            USERS: "one|1234"
-            ADDRESS: "ftp.localhost"
+            - "./bin/test:/test"
+        command: /test -stype server
+    server2:
+        image: ubuntu:latest
         volumes:
             - "/etc/localtime:/etc/localtime:ro"
+            - "./bin/test:/test"
+        command: /test -stype server
+    
+    # 不经过 nginx 的直接通信测试 测试通过
+    # client1:
+    #     depends_on:
+    #         - server
+    #     image: ubuntu:latest
+    #     volumes:
+    #         - "/etc/localtime:/etc/localtime:ro"
+    #         - "./bin/test:/test"
+    #     command: /test -stype client -toHost server1 -toPort 7990
+    
+    # 经过 nginx 的直接通信测试 测试通过
+    client2:
+        depends_on:
+            - nginx
+            - server1
+            - server2
+        image: ubuntu:latest
+        volumes:
+            - "/etc/localtime:/etc/localtime:ro"
+            - "./bin/test:/test"
+        command: /test -stype client -toHost nginx -toPort 7564

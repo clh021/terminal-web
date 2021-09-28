@@ -34,8 +34,8 @@ func udpListen(conn_host string, conn_port int) {
 		}
 	}
 }
-func tcpListen(conn_type string, conn_host string, conn_port int) {
-	lis, err := net.Listen(conn_type, fmt.Sprintf("%s:%d", conn_host, conn_port))
+func tcpListen(conn_host string, conn_port int) {
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", conn_host, conn_port))
 	if err != nil {
 		fmt.Println("[TCP]Errorlis:", err.Error())
 		os.Exit(1)

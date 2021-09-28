@@ -25,7 +25,7 @@ func tcpRecv(conn net.Conn) {
 	}
 	fmt.Println(string(buf[:n]))
 }
-func tcpSender(sendto string, port int) {
+func tcpSender(sendto string, port int, inputMode bool) {
 	// 建立连接
 	conn, err := net.Dial("tcp", fmt.Sprintf("%v:%v", sendto, port))
 	if err != nil {
@@ -41,16 +41,18 @@ func tcpSender(sendto string, port int) {
 		tcpRecv(conn)
 	}
 
-	// 手动测试
-	inputReader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Println("[TCP]Input something to send(q to quite):")
-		input, _ := inputReader.ReadString('\n')
-		inputInfo := strings.Trim(input, "\r\n")
-		if strings.ToUpper(inputInfo) == "Q" {
-			return
+	if inputMode {
+		// 手动测试
+		inputReader := bufio.NewReader(os.Stdin)
+		for {
+			fmt.Println("[TCP]Input something to send(q to quite):")
+			input, _ := inputReader.ReadString('\n')
+			inputInfo := strings.Trim(input, "\r\n")
+			if strings.ToUpper(inputInfo) == "Q" {
+				return
+			}
+			tcpSend(conn, inputInfo)
+			tcpRecv(conn)
 		}
-		tcpSend(conn, inputInfo)
-		tcpRecv(conn)
 	}
 }
